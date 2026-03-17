@@ -24,7 +24,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(\App\Http\Requests\ProfileUpdateRequest $request): \Illuminate\Http\RedirectResponse
     {
         $request->user()->fill($request->validated());
 
@@ -32,9 +32,19 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        // --- Logika Upload Foto (Sudah diubah ke profile_photo) ---
+        if ($request->hasFile('profile_photo')) {
+            if ($request->user()->profile_photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->user()->profile_photo)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($request->user()->profile_photo);
+            }
+            $photoPath = $request->file('profile_photo')->store('profile-photos', 'public');
+            $request->user()->profile_photo = $photoPath;
+        }
+        // --- Selesai ---
+
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return \Illuminate\Support\Facades\Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**

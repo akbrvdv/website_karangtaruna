@@ -24,8 +24,10 @@ class ProfileUpdateRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                \Illuminate\Validation\Rule::unique(\App\Models\User::class)->ignore($this->user()->id),
             ],
+                // Ubah kata photo jadi profile_photo
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], 
         ];
     }
 }

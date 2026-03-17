@@ -2,9 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Complaint extends Model // Ganti nama class sesuai file (Category / Committee)
+class Complaint extends Model
 {
-    protected $guarded = ['id'];
+    use HasFactory;
+
+    // Pastikan kolom ini diizinkan untuk diisi
+    protected $fillable = [
+        'name',
+        'title',
+        'description'
+    ];
 }

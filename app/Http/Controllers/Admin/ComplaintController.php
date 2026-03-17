@@ -8,17 +8,23 @@ use Illuminate\Http\Request;
 
 class ComplaintController extends Controller
 {
+    /**
+     * Menampilkan daftar aduan warga dari yang paling baru
+     */
     public function index()
     {
         $complaints = Complaint::latest()->get();
         return view('admin.complaints.index', compact('complaints'));
     }
 
-    public function update(Request $request, Complaint $complaint)
+    /**
+     * Menghapus data aduan
+     */
+    public function destroy(Complaint $complaint)
     {
-        $request->validate(['status' => 'required|in:pending,diproses,selesai']);
-        $complaint->update(['status' => $request->status]);
-        
-        return back()->with('success', 'Status aduan diperbarui!');
+        $complaint->delete();
+
+        return redirect()->route('admin.complaints.index')
+                         ->with('success', 'Aduan warga berhasil dihapus (diselesaikan)!');
     }
 }

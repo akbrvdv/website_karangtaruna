@@ -23,17 +23,16 @@ Route::post('/aduan', [PublicController::class, 'storeAduan'])->name('aduan.stor
 // ==========================================
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Rute Dashboard (Bawaan Breeze, jangan dikasih prefix admin)
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Rute khusus manajemen Admin (Dikelompokkan di dalam prefix /admin)
+    // Rute khusus manajemen Admin (Sekarang terbuka full untuk Tambah, Edit, Hapus)
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::resource('posts', PostController::class)->except(['create', 'show', 'edit']);
-        Route::resource('complaints', ComplaintController::class)->only(['index', 'update', 'destroy']);
-        Route::resource('categories', CategoryController::class)->except(['create', 'show', 'edit', 'update']);
-        Route::resource('committees', CommitteeController::class)->except(['create', 'show', 'edit', 'update']);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('posts', PostController::class);
+        Route::resource('committees', CommitteeController::class);
+        Route::resource('complaints', ComplaintController::class);
     });
 });
 
@@ -46,7 +45,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ==========================================
-// RUTE AUTENTIKASI (Bawaan Breeze)
-// ==========================================
 require __DIR__.'/auth.php';
