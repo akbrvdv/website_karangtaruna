@@ -2,52 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Committee;
 use App\Models\Complaint;
+use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
-        public function index()
+    public function index()
     {
-        // Mengambil 3 berita terbaru untuk beranda
-        $posts = \App\Models\Post::latest()->take(3)->get();
+        $posts = Post::with(['user'])->latest()->take(3)->get();
         return view('public.home', compact('posts'));
     }
 
-    public function berita()
+    public function sejarah()
     {
-        // Mengambil semua berita (bisa pakai paginate)
-        $posts = \App\Models\Post::latest()->paginate(9);
-        return view('public.berita', compact('posts'));
+        return view('public.sejarah');
     }
 
     public function pengurus()
     {
-        // Pastikan Anda sudah punya model Committee
-        $committees = \App\Models\Committee::all(); 
+        $committees = Committee::oldest()->get();
         return view('public.pengurus', compact('committees'));
     }
 
-    public function aduan()
-{
-    return view('public.aduan');
-}
+    public function blogCategory($slug)
+    {
+        $categoryName = ucfirst($slug); // Mengubah 'opini' jadi 'Opini'
+        $posts = Post::where('category', $categoryName)
+                     ->with(['user'])
+                     ->latest()
+                     ->paginate(9);
+        
+        $pageTitle = 'Kategori: ' . $categoryName;
+        return view('public.blog', compact('posts', 'pageTitle'));
+    }
 
-    public function storeAduan(\Illuminate\Http\Request $request)
+    public function aduan()
+    {
+        return view('public.aduan');
+    }
+
+    public function storeAduan(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        \App\Models\Complaint::create([
-            'name' => $request->name, // Boleh kosong (nullable)
+        Complaint::create([
+            'name' => $request->name,
             'title' => $request->title,
             'description' => $request->description,
         ]);
 
-        return redirect()->back()->with('success', 'Terima kasih! Aduan/Usulan Anda telah berhasil dikirim ke pengurus Karang Taruna.');
+        return redirect()->back()->with('success', 'Aduan berhasil dikirim!');
     }
 }

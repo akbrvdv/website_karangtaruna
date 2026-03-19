@@ -9,21 +9,15 @@ class Post extends Model
 {
     use HasFactory;
 
-    // Tambahkan baris ini agar data berita tidak diblokir saat disimpan
+    // Ini dia daftar tamu yang diizinkan masuk ke database
     protected $fillable = [
         'title',
+        'category',
+        'image', // <-- INI YANG TADI KELUPAAN! 😭
         'content',
-        'category_id',
         'user_id'
     ];
 
-    // Relasi ke Kategori
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    // Relasi ke User (Penulis)
     public function user()
     {
         return $this->belongsTo(User::class);

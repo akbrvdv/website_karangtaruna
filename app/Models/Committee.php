@@ -9,10 +9,10 @@ class Committee extends Model
 {
     use HasFactory;
 
-    // Pastikan ketiga kolom ini ada di dalam array!
+    // Kolom yang boleh diisi
     protected $fillable = [
         'name',
         'position',
-        'photo' 
+        'image'
     ];
 }

@@ -6,25 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-public function up(): void
-{
-    Schema::create('complaints', function (Blueprint $table) {
-        $table->id();
-        $table->string('sender_name');
-        $table->string('sender_contact')->nullable();
-        $table->string('title');
-        $table->text('message');
-        $table->enum('status', ['pending', 'diproses', 'selesai'])->default('pending');
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('complaints', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable(); // Nama opsional (bisa anonim)
+            $table->string('title'); // Judul laporan
+            $table->text('description'); // Isi laporan
+            $table->timestamps();
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('complaints');

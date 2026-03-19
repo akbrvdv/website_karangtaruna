@@ -1,98 +1,91 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-<style>
-        /* Sembunyikan scrollbar untuk Chrome, Safari dan Opera */
-        ::-webkit-scrollbar {
-            display: none;
-            width: 0px;
-            background: transparent;
-        }
-        /* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
-        html, body, * {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title') - Karang Taruna Tunas Muda Ngumpul Wetan</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+        html { scrollbar-width: none; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Karang Taruna | @yield('title', 'Beranda')</title>
+<body class="bg-gray-50 text-gray-900 font-sans">
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="bg-white shadow-sm sticky top-0 z-50" x-data="{ mobileMenu: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-2">
-                        <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg">KT</div>
-                        <span class="font-bold text-xl text-blue-900 hidden sm:block">Karang Taruna</span>
+            <div class="flex justify-between h-20">
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                        TM
+                    </div>
+                    <a href="{{ route('home') }}" class="flex flex-col">
+                        <span class="font-bold text-lg text-blue-900 leading-tight">Tunas Muda</span>
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-widest">Ngumpul Wetan</span>
                     </a>
                 </div>
-                <div class="hidden sm:flex sm:items-center sm:space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 text-sm font-medium">Beranda</a>
-                    <a href="{{ route('berita.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 text-sm font-medium">Berita</a>
-                    <a href="{{ route('pengurus.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 text-sm font-medium">Pengurus</a>
-                    <a href="{{ route('aduan.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 text-sm font-medium">Layanan Aduan</a>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ route('home') }}" class="text-sm font-bold text-gray-700 hover:text-blue-600">Home</a>
+                    
+                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                        <button class="flex items-center gap-1 text-sm font-bold text-gray-700 hover:text-blue-600 py-2">
+                            Blog <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div x-show="open" x-cloak class="absolute left-0 w-40 bg-white border border-gray-100 rounded-lg shadow-lg py-2">
+                            <a href="{{ route('blog.category', 'opini') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Opini</a>
+                            <a href="{{ route('blog.category', 'kegiatan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Kegiatan</a>
+                            <a href="{{ route('blog.category', 'berita') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Berita</a>
+                        </div>
+                    </div>
+
+                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                        <button class="flex items-center gap-1 text-sm font-bold text-gray-700 hover:text-blue-600 py-2">
+                            Profile <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div x-show="open" x-cloak class="absolute left-0 w-56 bg-white border border-gray-100 rounded-lg shadow-lg py-2">
+                            <a href="{{ route('profil.sejarah') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Sejarah</a>
+                            <a href="{{ route('pengurus.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Susunan Kepengurusan</a>
+                        </div>
+                    </div>
+
+                    <a href="{{ route('aduan.index') }}" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-blue-700 transition">
+                        Kirim Aduan
+                    </a>
                 </div>
-                <div class="hidden sm:flex sm:items-center">
-                    <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-md hover:shadow-lg">Login Admin</a>
-                </div>
-                
-                <div class="flex items-center sm:hidden">
-                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Buka menu utama</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+
+                <div class="flex items-center md:hidden">
+                    <button @click="mobileMenu = !mobileMenu" class="text-gray-500 hover:text-blue-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
+
+        <div x-show="mobileMenu" x-cloak class="md:hidden bg-white border-t border-gray-100 p-4">
+            <a href="{{ route('home') }}" class="block py-2 font-bold text-gray-700">Home</a>
+            <div class="py-2"><span class="font-bold text-gray-400 text-xs uppercase">Blog</span></div>
+            <a href="{{ route('blog.category', 'opini') }}" class="block py-2 pl-4 text-gray-600">Opini</a>
+            <a href="{{ route('blog.category', 'kegiatan') }}" class="block py-2 pl-4 text-gray-600">Kegiatan</a>
+            <a href="{{ route('blog.category', 'berita') }}" class="block py-2 pl-4 text-gray-600">Berita</a>
+            <div class="py-2 mt-2"><span class="font-bold text-gray-400 text-xs uppercase">Profile</span></div>
+            <a href="{{ route('profil.sejarah') }}" class="block py-2 pl-4 text-gray-600">Sejarah</a>
+            <a href="{{ route('pengurus.index') }}" class="block py-2 pl-4 text-gray-600">Susunan Kepengurusan</a>
+            <a href="{{ route('aduan.index') }}" class="block mt-4 text-center bg-blue-600 text-white py-3 rounded-lg font-bold">Kirim Aduan</a>
+        </div>
     </nav>
 
-    <main class="flex-grow">
+    <main class="min-h-screen">
         @yield('content')
     </main>
 
-    <footer class="bg-gray-900 text-white pt-12 pb-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-sm">KT</div>
-                        Karang Taruna
-                    </h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Wadah pengembangan generasi muda yang tumbuh atas dasar kesadaran dan rasa tanggung jawab sosial dari, oleh, dan untuk masyarakat.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Tautan Cepat</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="{{ route('home') }}" class="hover:text-blue-400 transition">Beranda</a></li>
-                        <li><a href="{{ route('berita.index') }}" class="hover:text-blue-400 transition">Kabar Terbaru</a></li>
-                        <li><a href="{{ route('pengurus.index') }}" class="hover:text-blue-400 transition">Susunan Pengurus</a></li>
-                        <li><a href="{{ route('aduan.index') }}" class="hover:text-blue-400 transition">Sampaikan Aduan</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Hubungi Kami</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Sekretariat RW / Desa Setempat</li>
-                        <li class="flex items-center gap-2"><svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> info@karangtaruna.desa.id</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-                &copy; {{ date('Y') }} Karang Taruna. Hak Cipta Dilindungi.
-            </div>
-        </div>
+    <footer class="bg-gray-900 py-8 text-center text-gray-400 text-sm">
+        &copy; {{ date('Y') }} Karang Taruna "Tunas Muda" Ngumpul Wetan.
     </footer>
-
 </body>
 </html>

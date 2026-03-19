@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Committee;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Wajib ditambahkan untuk hapus foto
+use Illuminate\Support\Facades\Storage;
 
 class CommitteeController extends Controller
 {
@@ -22,24 +22,23 @@ class CommitteeController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi Ketat (Terutama Ukuran Foto)
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto (maks 2MB)
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('photo')) {
-            // Simpan foto ke folder storage/app/public/pengurus
-            $imagePath = $request->file('photo')->store('pengurus', 'public');
+        $data = $request->all();
+
+        // 2. Logika Upload Modern
+        if ($request->hasFile('image')) {
+            // Kita pakai cara paling aman di Windows: store() otomatis bikin nama unik
+            $path = $request->file('image')->store('committees', 'public');
+            $data['image'] = $path; // Simpan path-nya (misal: committees/unique_name.jpg)
         }
 
-        Committee::create([
-            'name' => $request->name,
-            'position' => $request->position,
-            'photo' => $imagePath,
-        ]);
-
+        Committee::create($data);
         return redirect()->route('admin.committees.index')->with('success', 'Pengurus berhasil ditambahkan!');
     }
 
@@ -50,39 +49,36 @@ class CommitteeController extends Controller
 
     public function update(Request $request, Committee $committee)
     {
+        // 1. Validasi
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB
         ]);
 
-        $imagePath = $committee->photo; // Gunakan foto lama sebagai default
+        $data = $request->all();
 
-        if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
-            if ($committee->photo && Storage::disk('public')->exists($committee->photo)) {
-                Storage::disk('public')->delete($committee->photo);
+        // 2. Logika Update Foto Modern
+        if ($request->hasFile('image')) {
+            // Hapus foto LAMA jika ada
+            if ($committee->image) {
+                Storage::disk('public')->delete($committee->image);
             }
-            // Simpan foto baru
-            $imagePath = $request->file('photo')->store('pengurus', 'public');
+            // Simpan foto BARU
+            $path = $request->file('image')->store('committees', 'public');
+            $data['image'] = $path;
         }
 
-        $committee->update([
-            'name' => $request->name,
-            'position' => $request->position,
-            'photo' => $imagePath,
-        ]);
-
+        $committee->update($data);
         return redirect()->route('admin.committees.index')->with('success', 'Data pengurus berhasil diperbarui!');
     }
 
     public function destroy(Committee $committee)
     {
-        // Hapus file foto dari folder jika ada
-        if ($committee->photo && Storage::disk('public')->exists($committee->photo)) {
-            Storage::disk('public')->delete($committee->photo);
+        // Hapus foto dari storage saat data dihapus
+        if ($committee->image) {
+            Storage::disk('public')->delete($committee->image);
         }
-        
         $committee->delete();
         return redirect()->route('admin.committees.index')->with('success', 'Pengurus berhasil dihapus!');
     }

@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-public function up(): void
-{
-    Schema::create('committees', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('position'); // Jabatan
-        $table->string('photo')->nullable();
-        $table->integer('order')->default(0); // Urutan tampil
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('committees', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');       // Nama Pengurus
+            $table->string('position');   // Jabatan (Ketua, Sekretaris, dll)
+            $table->string('image')->nullable(); // Foto Pengurus
+            $table->timestamps();
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('committees');

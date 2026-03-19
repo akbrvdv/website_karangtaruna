@@ -9,10 +9,10 @@ class Complaint extends Model
 {
     use HasFactory;
 
-    // Pastikan kolom ini diizinkan untuk diisi
+    // Izinkan 3 kolom ini untuk diisi dari form
     protected $fillable = [
         'name',
         'title',
-        'description'
+        'description',
     ];
 }
