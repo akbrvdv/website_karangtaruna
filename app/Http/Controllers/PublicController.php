@@ -58,4 +58,13 @@ class PublicController extends Controller
 
         return redirect()->back()->with('success', 'Aduan berhasil dikirim!');
     }
+    
+    public function showPost($id)
+    {
+        // Mencari berita berdasarkan ID beserta data usernya
+        $post = Post::with(['user'])->findOrFail($id);
+        
+        // Memanggil file detail.blade.php di dalam folder public
+        return view('public.detail', compact('post'));
+    }
 }

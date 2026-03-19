@@ -19,7 +19,7 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($posts as $post)
-                <article class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+                <a href="{{ route('blog.show', $post->id) }}" class="block bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
                     
                     <div class="h-48 bg-gray-200 w-full shrink-0">
                         @if($post->image)
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                </article>
+                </a>
             @endforeach
         </div>
         

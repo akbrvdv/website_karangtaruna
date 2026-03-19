@@ -16,7 +16,7 @@ Route::get('/profil/sejarah', [PublicController::class, 'sejarah'])->name('profi
 Route::get('/profil/pengurus', [PublicController::class, 'pengurus'])->name('pengurus.index');
 Route::get('/aduan', [PublicController::class, 'aduan'])->name('aduan.index');
 Route::post('/aduan', [PublicController::class, 'storeAduan'])->name('aduan.store');
-
+Route::get('/berita/detail/{id}', [PublicController::class, 'showPost'])->name('blog.show');
 
 // ==========================================
 // AREA ADMIN (Wajib Login)
