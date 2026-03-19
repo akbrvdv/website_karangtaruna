@@ -134,7 +134,7 @@
             
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
                 <p>&copy; {{ date('Y') }} Karang Taruna "Tunas Muda". All rights reserved.</p>
-                <p>Designed for Ngumpul Wetan.</p>
+                <p>Karang Taruna "Tunas Muda" Desa Ngumpul Wetan</p>
             </div>
         </div>
     </footer>
